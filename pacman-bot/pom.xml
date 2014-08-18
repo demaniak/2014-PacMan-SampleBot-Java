@@ -7,6 +7,10 @@
     <version>1.0-SNAPSHOT</version>
     <name>pacman-bot</name>
     <url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>		
+	</properties>
+	
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -32,5 +36,54 @@
             </plugin>
         </plugins>
     </build>
+	
+	<profiles>
+		<profile>
+			<id>dist</id>
+			<properties>				
+				<dist.folder>${project.build.directory}/dist</dist.folder>
+				<bot.name>sampleBot</bot.name>
+			</properties>
+			
+			<build>
+				<plugins>
+					<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<target>								
+								<copy todir="${dist.folder}">
+									<fileset dir=".">
+										<include name="*.bat" />
+										<include name="readme.*" />
+										<include name="pom.xml" />
+									</fileset>
+									
+								</copy>
+								 
+								<copy todir="${dist.folder}/src">
+									<fileset dir="./src">
+										<include name="**/*" />										
+									</fileset>
+								</copy>
+								
+								<zip destfile="${project.build.directory}/${bot.name}.zip" basedir="${dist.folder}">
+								</zip>						
+
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
